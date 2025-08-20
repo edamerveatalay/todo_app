@@ -18,7 +18,7 @@ class DisplayListOfTasks extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = context.deviceSize;
     final height =
-        isCompletedTasks ? deviceSize.height * 0.4 : deviceSize.height * 0.5;
+        isCompletedTasks ? deviceSize.height * 0.25 : deviceSize.height * 0.3;
     final emptyTaskMessage =
         isCompletedTasks //if else bloğu gibi doğru işaretlenmiş olan there is no task todo çıkacak
             ? 'There is no complted task yet'
@@ -41,6 +41,7 @@ class DisplayListOfTasks extends StatelessWidget {
                 return Row(
                   children: [
                     Container(
+                      padding: EdgeInsets.all(9.0),
                       decoration: BoxDecoration(
                         //containerin arka planını ve kenarlarını düzenlemek için
                         shape: BoxShape //shape boxdecoration içinde kullanılır sadece
