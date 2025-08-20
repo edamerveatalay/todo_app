@@ -58,12 +58,21 @@ class HomeScreen extends StatelessWidget {
                       DisplayListOfTasks(
                         tasks: [
                           Task(
-                            title: 'title',
+                            title: 'title 1',
                             note: 'note',
                             time: '10.12',
                             date: 'Aug, 17 ',
                             isCompleted: false,
-                            category: TaskCategories.education,
+                            category: TaskCategories
+                                .shopping, //kategoriye göre ikon değişiyor
+                          ),
+                          Task(
+                            title: 'title 2 title 2 title 2 ',
+                            note: 'note',
+                            time: '13.12',
+                            date: 'Aug, 17 ',
+                            isCompleted: false,
+                            category: TaskCategories.work,
                           )
                         ],
                       ),
@@ -72,9 +81,27 @@ class HomeScreen extends StatelessWidget {
                         style: context.textTheme.headlineMedium,
                       ),
                       const Gap(20),
-                      const DisplayListOfTasks(
+                      DisplayListOfTasks(
                         //display sınıfını burada çağırıyoruz yazılacak şeyi orada yazdık
-                        tasks: [],
+                        tasks: [
+                          Task(
+                            title: 'title 1',
+                            note: 'note',
+                            time: '10.12',
+                            date: 'Aug, 17 ',
+                            isCompleted: true,
+                            category: TaskCategories.personal,
+                          ),
+                          Task(
+                            title: 'title 2 title 2 title 2 ',
+                            note: 'note',
+                            time: '13.12',
+                            date: 'Aug, 17 ',
+                            isCompleted:
+                                true, //tik atma işlemi burayı true yapınca oluyor
+                            category: TaskCategories.education,
+                          )
+                        ],
                         isCompletedTasks: true,
                       ),
                       const Gap(20),

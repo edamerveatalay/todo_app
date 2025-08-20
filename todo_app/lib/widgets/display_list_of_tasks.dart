@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/data/data.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/common_container.dart';
+import 'package:todo_app/widgets/task_tile.dart';
 
 class DisplayListOfTasks extends StatelessWidget {
   //görev listesi görüntüleme
@@ -32,28 +33,29 @@ class DisplayListOfTasks extends StatelessWidget {
                 style: context.textTheme.headlineSmall,
               ),
             )
-          : ListView.builder(
+          : ListView.separated(
+              //separated: Her iki liste elemanının arasına bir “ayırıcı (separator)” ekleyebilmeni sağlar.
+              //builder: ekranda ne kadar veri varsa sadece onların yüklenmesini sağlar
+              //listeyi kaydırılabilir şekilde göstermeye yarar
               shrinkWrap: true,
               itemCount: tasks.length,
-              padding: EdgeInsets.zero,
+              padding: EdgeInsets.zero, //boşluğu sıfırlamak demek
               itemBuilder: (ctx, index) {
                 final task = tasks[index];
-                return Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(9.0),
-                      decoration: BoxDecoration(
-                        //containerin arka planını ve kenarlarını düzenlemek için
-                        shape: BoxShape //shape boxdecoration içinde kullanılır sadece
-                            .circle, //containerin kenarlarını yuvarlak yapar daire
-                        color: Colors.red,
-                      ),
-                      child: Center(
-                        child:
-                            Icon(task.category.icon), //kullanıcı profil simgesi
-                      ),
-                    )
-                  ],
+                return InkWell(
+                  onLongPress: () {
+                    //uzun süre basılı tutunca çalışır,silme, düzenleme, detay açma gibi ek işlemler için kullanılır.
+                    //taski silme
+                  },
+                  onTap: () {
+                    //taskin detaylarını gösterecek
+                  },
+                  child: TaskTile(task: task),
+                ); //tıklanabilirlik özelliği verdik
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Divider(
+                  thickness: 1.5,
                 );
               },
             ),
