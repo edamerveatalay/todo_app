@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:path/path.dart';
 import 'package:todo_app/data/data.dart';
 import 'package:todo_app/utils/extensions.dart';
+import 'package:todo_app/widgets/circle_container.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({super.key, required this.task, this.onCompleted});
@@ -32,21 +33,9 @@ class TaskTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(
-                9.0), //kenar boşlukları tanımlamak için kullanılan sınıf
-            decoration: BoxDecoration(
-                //containerin arka planını ve kenarlarını düzenlemek için
-                shape: BoxShape //shape boxdecoration içinde kullanılır sadece
-                    .circle, //containerin kenarlarını yuvarlak yapar daire
-
-                color: task.category.color
-                    .withValues(alpha: backgroundOpacity), //saydam yaptık ikonu
-                border: Border.all(
-                    width: 2,
-                    color: task.category.color.withValues(
-                        alpha:
-                            iconValues))), //yapılmış olanların ikonunu cansızlaştırıyoruz
+          CircleContainer(
+            color: task.category.color
+                .withValues(alpha: backgroundOpacity), //saydam yaptık ikonu
             child: Center(
               child: Icon(
                 task.category.icon, //kullanıcı profil simgesi

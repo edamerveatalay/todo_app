@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/data/data.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/common_container.dart';
+import 'package:todo_app/widgets/task_details.dart';
 import 'package:todo_app/widgets/task_tile.dart';
 
 class DisplayListOfTasks extends StatelessWidget {
@@ -47,8 +48,22 @@ class DisplayListOfTasks extends StatelessWidget {
                     //uzun süre basılı tutunca çalışır,silme, düzenleme, detay açma gibi ek işlemler için kullanılır.
                     //taski silme
                   },
-                  onTap: () {
+                  onTap: () async {
                     //taskin detaylarını gösterecek
+                    await showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (ctx) {
+                        final size = MediaQuery.of(ctx).size;
+                        return Container(
+                          width: size.width, // yanları ful kapla
+                          height: size.height *
+                              0.5, // ekranın yarısı kadar yüksek olsun
+                          padding: const EdgeInsets.all(20),
+                          child: TaskDetails(task: task),
+                        );
+                      },
+                    );
                   },
                   child: TaskTile(task: task),
                 ); //tıklanabilirlik özelliği verdik
