@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                         tasks: [
                           Task(
                             title: 'title 1',
-                            note: 'note',
+                            note: '',
                             time: '10.12',
                             date: 'Aug, 17 ',
                             isCompleted: false,
@@ -76,6 +76,7 @@ class HomeScreen extends StatelessWidget {
                           )
                         ],
                       ),
+                      Gap(16),
                       Text(
                         'Completed',
                         style: context.textTheme.headlineMedium,
@@ -89,7 +90,9 @@ class HomeScreen extends StatelessWidget {
                             note: 'note',
                             time: '10.12',
                             date: 'Aug, 17 ',
-                            isCompleted: true,
+                            isCompleted:
+                                true, //tamamlanmış olanlara true atanmış bu da task_details sınıfından çağrılacak
+                            //çağrıldıktan sonra bu true ise oradaki kontrol yapılacak ve üstü çizilecek
                             category: TaskCategories.personal,
                           ),
                           Task(
@@ -98,7 +101,7 @@ class HomeScreen extends StatelessWidget {
                             time: '13.12',
                             date: 'Aug, 17 ',
                             isCompleted:
-                                true, //tik atma işlemi burayı true yapınca oluyor
+                                false, //tik atma işlemi burayı true yapınca oluyor
                             category: TaskCategories.education,
                           )
                         ],
