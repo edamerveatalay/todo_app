@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:todo_app/config/routes/routes.dart';
 import 'package:todo_app/data/models/task.dart';
 import 'package:todo_app/utils/extensions.dart';
 import 'package:gap/gap.dart';
 import 'package:todo_app/utils/task_categories.dart';
 import 'package:todo_app/widgets/display_white_text.dart';
 import 'package:todo_app/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
+  static HomeScreen builder(
+          BuildContext context,
+          GoRouterState //Bu parametre aslında builder fonksiyonuna route ile ilgili bilgi taşıyor.
+              state) => //builder adında fonksiyon, HomeScreen döndürüyor
+//build con vs Fonksiyonun aldığı parametreler //
+      const HomeScreen(); //Fonksiyon tek satırda HomeScreen widget’ını return ediyor
+  /*Yani GoRouterState state → route ile ilgili durum bilgisini tutar:
+path parametreleri: /user/:id → id değeri
+query parametreleri: /home?tab=1
+route’un adı ve konumu*/
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colorScheme;
+    final colors = context
+        .colorScheme; //context ile extensions sayfasındaki color'a ulaşıp burada çağırıyoruz
     final deviceSize = context.deviceSize;
     return Scaffold(
       body: Stack(
@@ -109,7 +123,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const Gap(20),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => context.push(RouteLocation.createTask),
                         child: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: DisplayWhiteText(text: 'Add new task'),
