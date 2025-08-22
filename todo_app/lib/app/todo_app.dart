@@ -5,6 +5,7 @@ import 'package:todo_app/config/theme/app_theme.dart';
 import 'package:todo_app/screens/screens.dart';
 
 class TodoApp extends ConsumerWidget {
+  //StatelessWidget gibidir ama Riverpod provider’larını kullanabilmen için WidgetRef nesnesini build fonksiyonunda sana verir.
   const TodoApp({super.key});
 
   @override
@@ -28,3 +29,5 @@ hangi sayfaların (route) var olduğu,
 hangi path’e gidilince hangi ekran açılacağı,
 uygulamanın başlangıç ekranı (initialLocation)
 gibi bilgiler var.*/
+//Flutter widget’larının birbirinden bağımsız şekilde aynı veriyi kullanabilmesini sağlar.
+//Provider’ı bir kez tanımlarsın, sonra uygulamanın her yerinden erişebilirsin.
