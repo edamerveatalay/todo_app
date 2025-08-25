@@ -4,11 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:todo_app/config/routes/routes.dart';
 import 'package:todo_app/data/models/task.dart';
 import 'package:todo_app/utils/extensions.dart';
-import 'package:gap/gap.dart';
 import 'package:todo_app/utils/task_categories.dart';
 import 'package:todo_app/widgets/display_white_text.dart';
 import 'package:todo_app/widgets/widgets.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   static HomeScreen builder(
