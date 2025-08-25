@@ -11,6 +11,23 @@ enum TaskCategories {
   travel(icon: Icons.flight, color: Colors.deepOrange),
   work(icon: Icons.work, color: Colors.amber);
 
+//String ile enum arasında dönüşüm yapmak için kullanılır.
+//String → enum = dışardan gelen veriyi uygulamada güvenli şekilde kullanabilmek için
+
+  static TaskCategories stringToCategory(String name) {
+    //Fonksiyon, String → TaskCategories dönüşümü yapıyor.
+    try {
+      return TaskCategories
+          .values //TaskCategories.values → Enum’daki tüm değerleri liste olarak alır.
+
+          .firstWhere((category) => //Listede ilk eşleşen elementi bulur.
+              category.name == name);
+      //Enum’daki her öğenin name alanı, verilen String ile eşleşiyor mu diye kontrol eder.
+    } catch (e) {
+      return TaskCategories.others;
+    }
+  }
+
   final IconData icon;
   final Color color;
 
