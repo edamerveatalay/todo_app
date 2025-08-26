@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/config/routes/routes.dart';
+import 'package:todo_app/data/data.dart';
 import 'package:todo_app/providers/providers.dart';
 import 'package:todo_app/utils/extensions.dart';
 import 'package:todo_app/utils/task_categories.dart';
@@ -32,6 +33,9 @@ route’un adı ve konumu*/
     final deviceSize = context.deviceSize;
     final taskState = ref.watch(
         taskProvider); //ref: Riverpod Provider’larını okumak ve dinlemek için kullanıyoruz.
+    final completedTasks = _completedTasks(taskState.tasks);
+    final incompletedTasks = _incompletedTasks(taskState.tasks);
+
     return Scaffold(
       body: Stack(
         //widgetların dikeyde sıralanmasını ama üst üste binebilmesini sağlar
@@ -74,8 +78,8 @@ route’un adı ve konumu*/
                         .stretch, //sardığı widgetların ekranı sarmasını sağlar yani ekran bpyunca uzanacak
                     children: [
                       DisplayListOfTasks(
-                        tasks: taskState
-                            .tasks, //Widget’a güncel görev listesini gönderiyoruz.
+                        tasks:
+                            incompletedTasks, //Widget’a güncel görev listesini gönderiyoruz.
                       ),
                       Gap(16),
                       Text(
@@ -85,7 +89,7 @@ route’un adı ve konumu*/
                       const Gap(20),
                       DisplayListOfTasks(
                         //display sınıfını burada çağırıyoruz yazılacak şeyi orada yazdık
-                        tasks: taskState.tasks,
+                        tasks: completedTasks,
                         isCompletedTasks: true,
                       ),
                       const Gap(20),
@@ -108,6 +112,32 @@ route’un adı ve konumu*/
         ],
       ),
     );
+  }
+
+  List<Task> _completedTasks(List<Task> tasks) {
+    final List<Task> filteredTasks =
+        []; //Yeni bir boş liste oluşturuyor.Bu listeye sadece tamamlanmış görevler eklenecek.
+    for (var task in tasks) {
+      //tasks listesindeki her Task nesnesini tek tek dolaşır.
+      if (task.isCompleted) {
+        //sadece isCompleted özelliği true olan görevleri seçer.
+        filteredTasks
+            .add(task); //seçilen görevleri filteredTasks listesine ekler.
+      }
+    }
+
+    return filteredTasks;
+  }
+
+  List<Task> _incompletedTasks(List<Task> tasks) {
+    final List<Task> filteredTasks = [];
+    for (var task in tasks) {
+      if (!task.isCompleted) {
+        filteredTasks.add(task);
+      }
+    }
+
+    return filteredTasks;
   }
 }
 //riverpıod: UI ile verinin arasında köprü görevi görür.

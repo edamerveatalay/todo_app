@@ -41,7 +41,7 @@ class Task extends Equatable {
       TaskKeys.time: time,
       TaskKeys.date: date,
       TaskKeys.category: category.name,
-      TaskKeys.isCompleted: isCompleted,
+      TaskKeys.isCompleted: isCompleted ? 1 : 0,
     };
   }
 
@@ -60,7 +60,7 @@ class Task extends Equatable {
 //String ile enum farklı tiplerdir, direkt atayamazsın.
 //TaskCategories.stringToCategory() → "personal" String’ini enum değerine çeviriyor: TaskCategories.personal
 //stringToCategory() → String → Enum dönüştürücü köprü
-      isCompleted: map[TaskKeys.isCompleted],
+      isCompleted: map[TaskKeys.isCompleted] == 1 ? true : false,
     );
   }
 

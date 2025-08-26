@@ -55,14 +55,13 @@ class TaskDatasource {
 //db → Yeni oluşturulan veritabanı.
     await db.execute('''
   CREATE TABLE ${DBKeys.dbTable}(
-  ${DBKeys.idColumn}INTEGER PRIMARY KEY AUTOINCREMENT,
-
+  ${DBKeys.idColumn} INTEGER PRIMARY KEY AUTOINCREMENT,
   ${DBKeys.titleColumn} TEXT,
 ${DBKeys.noteColumn} TEXT,
 ${DBKeys.dateColumn} TEXT,
 ${DBKeys.timeColumn} TEXT,
 ${DBKeys.categoryColumn} TEXT,
-${DBKeys.isCompletedColumn} INTEGER,
+${DBKeys.isCompletedColumn} INTEGER
 
   
   )

@@ -9,7 +9,9 @@ class TaskNotifier extends StateNotifier<TaskState> {
 
   final TaskRepository
       _repository; //_repository adında bir değişken tanımlıyoruz. Tipi TaskRepository
-  TaskNotifier(this._repository) : super(const TaskState.initial());
+  TaskNotifier(this._repository) : super(const TaskState.initial()) {
+    getTasks();
+  }
 /* Uygulamanın hafızasında “görev listesi” var.
 TaskNotifier → Bu listeyi güncelleyen kişi.
 TaskState → O listenin bulunduğu kutu.*/
@@ -18,6 +20,7 @@ TaskState → O listenin bulunduğu kutu.*/
 //Eğer hata olursa, konsola yazdırır (debugPrint).
     try {
       await _repository.createTask(task);
+      getTasks();
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -28,6 +31,7 @@ TaskState → O listenin bulunduğu kutu.*/
       final isCompleted = !task.isCompleted;
       final updatedTask = task.copyWith(isCompleted: isCompleted);
       await _repository.updateTask(updatedTask);
+      getTasks();
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -38,13 +42,14 @@ TaskState → O listenin bulunduğu kutu.*/
   Future<void> deleteTask(Task task) async {
     try {
       await _repository.deleteTask(task);
+      getTasks();
     } catch (e) {
       debugPrint(e.toString());
     }
   }
   //Örnek: Kullanıcı “çöp dök” görevini listeden sildi → repository’den de silindi.
 
-  Future<void> getTasks(Task task) async {
+  void getTasks() async {
     try {
       final tasks = await _repository.getAllTasks();
       state = state.copyWith(tasks: tasks);
