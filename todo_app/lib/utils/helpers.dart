@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/providers/date_provider.dart';
 
+import '../data/data.dart';
+
 class Helpers {
   Helpers._();
   static String timeToString(TimeOfDay time) {
@@ -18,6 +20,26 @@ class Helpers {
       return DateFormat.jm().format(date);
     } catch (e) {
       return '12.00 pm ';
+    }
+  }
+
+  static bool isTaskFromSelectedDate(Task task, DateTime selectedDate) {
+    final DateTime taskDate = _stringToDateTime(task.date);
+    if (taskDate.year == selectedDate.year &&
+        taskDate.month == selectedDate.month &&
+        taskDate.day == selectedDate.day) {
+      return true;
+    }
+
+    return false;
+  }
+
+  static DateTime _stringToDateTime(String dateString) {
+    try {
+      DateFormat format = DateFormat.yMMMd();
+      return format.parse(dateString);
+    } catch (e) {
+      return DateTime.now();
     }
   }
 

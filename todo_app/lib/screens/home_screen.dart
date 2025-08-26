@@ -36,8 +36,8 @@ route’un adı ve konumu*/
     final deviceSize = context.deviceSize;
     final taskState = ref.watch(
         taskProvider); //ref: Riverpod Provider’larını okumak ve dinlemek için kullanıyoruz.
-    final completedTasks = _completedTasks(taskState.tasks);
-    final incompletedTasks = _incompletedTasks(taskState.tasks);
+    final completedTasks = _completedTasks(taskState.tasks, ref);
+    final incompletedTasks = _incompletedTasks(taskState.tasks, ref);
     final selectedDate = ref.watch(dateProvider);
 
     return Scaffold(
@@ -121,25 +121,33 @@ route’un adı ve konumu*/
     );
   }
 
-  List<Task> _completedTasks(List<Task> tasks) {
+  List<Task> _completedTasks(List<Task> tasks, WidgetRef ref) {
+    final selectedDate = ref.watch(dateProvider);
     final List<Task> filteredTasks =
         []; //Yeni bir boş liste oluşturuyor.Bu listeye sadece tamamlanmış görevler eklenecek.
     for (var task in tasks) {
       //tasks listesindeki her Task nesnesini tek tek dolaşır.
-      if (task.isCompleted) {
+      final isTaskDay = Helpers.isTaskFromSelectedDate(task, selectedDate);
+
+      if (task.isCompleted && isTaskDay) {
         //sadece isCompleted özelliği true olan görevleri seçer.
-        filteredTasks
-            .add(task); //seçilen görevleri filteredTasks listesine ekler.
+        if (isTaskDay) {
+          filteredTasks.add(task);
+        }
       }
     }
 
     return filteredTasks;
   }
 
-  List<Task> _incompletedTasks(List<Task> tasks) {
+  List<Task> _incompletedTasks(List<Task> tasks, WidgetRef ref) {
+    final selectedDate = ref.watch(dateProvider);
+
     final List<Task> filteredTasks = [];
     for (var task in tasks) {
-      if (!task.isCompleted) {
+      final isTaskDay = Helpers.isTaskFromSelectedDate(task, selectedDate);
+
+      if (!task.isCompleted && isTaskDay) {
         filteredTasks.add(task);
       }
     }
