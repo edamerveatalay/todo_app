@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/config/routes/routes.dart';
-import 'package:todo_app/data/models/task.dart';
+import 'package:todo_app/providers/providers.dart';
 import 'package:todo_app/utils/extensions.dart';
 import 'package:todo_app/utils/task_categories.dart';
 import 'package:todo_app/widgets/display_white_text.dart';
 import 'package:todo_app/widgets/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
+  //consumerWidget: Riverpod’daki Provider’ları dinlemek için WidgetRef kullanmamızı sağlıyor.
+
   static HomeScreen builder(
           BuildContext context,
           GoRouterState //Bu parametre aslında builder fonksiyonuna route ile ilgili bilgi taşıyor.
@@ -22,10 +26,12 @@ route’un adı ve konumu*/
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context
         .colorScheme; //context ile extensions sayfasındaki color'a ulaşıp burada çağırıyoruz
     final deviceSize = context.deviceSize;
+    final taskState = ref.watch(
+        taskProvider); //ref: Riverpod Provider’larını okumak ve dinlemek için kullanıyoruz.
     return Scaffold(
       body: Stack(
         //widgetların dikeyde sıralanmasını ama üst üste binebilmesini sağlar
@@ -68,25 +74,8 @@ route’un adı ve konumu*/
                         .stretch, //sardığı widgetların ekranı sarmasını sağlar yani ekran bpyunca uzanacak
                     children: [
                       DisplayListOfTasks(
-                        tasks: [
-                          Task(
-                            title: 'title 1',
-                            note: '',
-                            time: '10.12',
-                            date: 'Aug, 17 ',
-                            isCompleted: false,
-                            category: TaskCategories
-                                .shopping, //kategoriye göre ikon değişiyor
-                          ),
-                          Task(
-                            title: 'title 2 title 2 title 2 ',
-                            note: 'note',
-                            time: '13.12',
-                            date: 'Aug, 17 ',
-                            isCompleted: false,
-                            category: TaskCategories.work,
-                          )
-                        ],
+                        tasks: taskState
+                            .tasks, //Widget’a güncel görev listesini gönderiyoruz.
                       ),
                       Gap(16),
                       Text(
@@ -96,27 +85,7 @@ route’un adı ve konumu*/
                       const Gap(20),
                       DisplayListOfTasks(
                         //display sınıfını burada çağırıyoruz yazılacak şeyi orada yazdık
-                        tasks: [
-                          Task(
-                            title: 'title 1',
-                            note: 'note',
-                            time: '10.12',
-                            date: 'Aug, 17 ',
-                            isCompleted:
-                                true, //tamamlanmış olanlara true atanmış bu da task_details sınıfından çağrılacak
-                            //çağrıldıktan sonra bu true ise oradaki kontrol yapılacak ve üstü çizilecek
-                            category: TaskCategories.personal,
-                          ),
-                          Task(
-                            title: 'title 2 title 2 title 2 ',
-                            note: 'note',
-                            time: '13.12',
-                            date: 'Aug, 17 ',
-                            isCompleted:
-                                false, //tik atma işlemi burayı true yapınca oluyor
-                            category: TaskCategories.education,
-                          )
-                        ],
+                        tasks: taskState.tasks,
                         isCompletedTasks: true,
                       ),
                       const Gap(20),
@@ -141,3 +110,6 @@ route’un adı ve konumu*/
     );
   }
 }
+//riverpıod: UI ile verinin arasında köprü görevi görür.
+//ref.watch(...) sayesinde Riverpod diyor ki:
+//“UI, bu Provider’ı dinliyor. Eğer state değişirse, bu widget’ı yeniden çiz.”
