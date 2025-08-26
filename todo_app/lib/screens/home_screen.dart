@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_app/config/routes/routes.dart';
 import 'package:todo_app/data/data.dart';
 import 'package:todo_app/providers/providers.dart';
 import 'package:todo_app/utils/extensions.dart';
+import 'package:todo_app/utils/helpers.dart';
 import 'package:todo_app/utils/task_categories.dart';
 import 'package:todo_app/widgets/display_white_text.dart';
 import 'package:todo_app/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends ConsumerWidget {
   //consumerWidget: Riverpod’daki Provider’ları dinlemek için WidgetRef kullanmamızı sağlıyor.
@@ -35,6 +38,7 @@ route’un adı ve konumu*/
         taskProvider); //ref: Riverpod Provider’larını okumak ve dinlemek için kullanıyoruz.
     final completedTasks = _completedTasks(taskState.tasks);
     final incompletedTasks = _incompletedTasks(taskState.tasks);
+    final selectedDate = ref.watch(dateProvider);
 
     return Scaffold(
       body: Stack(
@@ -50,10 +54,13 @@ route’un adı ve konumu*/
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    DisplayWhiteText(
-                      text: 'Aug 18, 2025',
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
+                    InkWell(
+                      onTap: () => Helpers.selectDate(context, ref),
+                      child: DisplayWhiteText(
+                        text: DateFormat.yMMMd().format(selectedDate),
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
                     DisplayWhiteText(
                       text: 'My Todo List',
