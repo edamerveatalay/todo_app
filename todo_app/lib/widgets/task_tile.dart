@@ -1,78 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:path/path.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/data/data.dart';
-import 'package:todo_app/utils/extensions.dart';
-import 'package:todo_app/widgets/circle_container.dart';
+import 'package:todo_app/utils/utils.dart';
+import 'package:todo_app/widgets/widgets.dart';
+import 'package:gap/gap.dart';
+import '../providers/providers.dart'; // hocanın providers dosyası
+import 'package:todo_app/providers/task/task_provider.dart';
 
-class TaskTile extends StatelessWidget {
-  const TaskTile({super.key, required this.task, this.onCompleted});
+class TaskTile extends ConsumerWidget {
+  const TaskTile({super.key, required this.task});
   final Task task;
-  final Function(bool?)? onCompleted;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final style = context.textTheme;
-    final double iconValues =
-        task.isCompleted ? 0.3 : 0.5; //görev tamamlandıysa ikon daha şeffaf
-    final backgroundOpacity = task.isCompleted
-        ? 0.1
-        : 0.3; //görev tamamlandıysa ikon dairesi şeffaflaştırılıyor. if else yapısı gibi
-    final textDecoration = task.isCompleted
-        ? TextDecoration.lineThrough
-        : TextDecoration
-            .none; // Eğer görev tamamlandıysa yazının üstünü çiz, tamamlanmadıysa çizgi olmasın
-    final fontWeight = task.isCompleted
-        ? FontWeight.normal
-        : FontWeight.bold; //tamamlanmamış görevler daha belirgin gözükecek
+    final colors = context.colorScheme;
+
+    final textDecoration =
+        task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none;
+    final fontWeight = task.isCompleted ? FontWeight.normal : FontWeight.bold;
+    final double iconOpacity = task.isCompleted ? 0.3 : 0.5;
+    final double backgroundOpacity = task.isCompleted ? 0.1 : 0.3;
+
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 16,
-        top: 10,
-        bottom: 10,
-      ),
+      padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
       child: Row(
         children: [
           CircleContainer(
-            color: task.category.color
-                .withValues(alpha: backgroundOpacity), //saydam yaptık ikonu
-            child: Center(
-              child: Icon(
-                task.category.icon, //kullanıcı profil simgesi
-                //task objesinin kategorisine ait ikonu verir
-                color: task.category.color.withValues(alpha: iconValues),
-              ), //kategoriye ait rengi verir
+            color: task.category.color.withOpacity(backgroundOpacity),
+            child: Icon(
+              task.category.icon,
+              color: task.category.color.withOpacity(iconOpacity),
             ),
           ),
-          const Gap(16), //iki widget arasına boşluk koyar
+          const Gap(16),
           Expanded(
-            //widgetın kalan boşlukları doldurmasını sağlar
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  task.title, // Görevin başlığını ekrana yazdırır
-                  style: style.titleMedium?.copyWith(
-                      // Yazının üstü çizilsin mi çizilmesin mi karar verir
-                      decoration: textDecoration,
-                      fontSize: 20,
-                      fontWeight: fontWeight),
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                task.title,
+                style: style.titleMedium?.copyWith(
+                  fontWeight: fontWeight,
+                  fontSize: 20,
+                  decoration: textDecoration,
                 ),
-                Text(
-                  task.time,
-                  style: style.titleMedium?.copyWith(
-                      // tamamlanmış görevin zamanının üstünü de çiziyoruz
-                      // Yazının üstü çizilsin mi çizilmesin mi karar verir
-                      decoration: textDecoration,
-                      fontWeight: FontWeight.bold),
+              ),
+              Text(
+                task.time,
+                style: style.titleMedium?.copyWith(
+                  decoration: textDecoration,
                 ),
-              ],
-            ),
-          ),
+              ),
+            ],
+          )),
           Checkbox(
             value: task.isCompleted,
-            onChanged: (value) {},
-          )
+            onChanged: (value) {
+              // hocanın yapısına uygun şekilde notifier çağrısı
+              ref.read(taskProvider.notifier).updateTask(task);
+            },
+            checkColor: colors.surface,
+          ),
         ],
       ),
     );

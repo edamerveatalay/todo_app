@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/data/data.dart';
+import 'package:todo_app/providers/task/task_provider.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/common_container.dart';
 import 'package:todo_app/widgets/task_details.dart';
 import 'package:todo_app/widgets/task_tile.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DisplayListOfTasks extends StatelessWidget {
+class DisplayListOfTasks extends ConsumerWidget {
   //görev listesi görüntüleme
   const DisplayListOfTasks({
     super.key,
@@ -17,7 +19,7 @@ class DisplayListOfTasks extends StatelessWidget {
   final bool isCompletedTasks;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final deviceSize = context.deviceSize;
     final height =
         isCompletedTasks ? deviceSize.height * 0.25 : deviceSize.height * 0.3;
@@ -47,6 +49,11 @@ class DisplayListOfTasks extends StatelessWidget {
                   onLongPress: () {
                     //uzun süre basılı tutunca çalışır,silme, düzenleme, detay açma gibi ek işlemler için kullanılır.
                     //taski silme
+                    AppAlerts.showDeleteAlertDialog(
+                      context,
+                      ref,
+                      task,
+                    );
                   },
                   onTap: () async {
                     //taskin detaylarını gösterecek
@@ -65,7 +72,9 @@ class DisplayListOfTasks extends StatelessWidget {
                       },
                     );
                   },
-                  child: TaskTile(task: task),
+                  child: TaskTile(
+                    task: task,
+                  ),
                 ); //tıklanabilirlik özelliği verdik
               },
               separatorBuilder: (BuildContext context, int index) {
